@@ -1,0 +1,52 @@
+---
+
+- hosts: nginx_servers
+  vars:
+    ansible_become_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36306531613634613966353966633162396130663135366563656432666239306334666135666434
+          3963343638656437373462313731623333333763316533330a323265383834613463336139623863
+          37663265326664373335636532646463326263383266383862356433623362343134616266643033
+          6237376664643434620a323966636431393530653666323435623735323836343730633336366662
+          35356166666236653734386134633063613533353661623432656662303763363061
+
+  tasks:
+
+    - name: Create /etc/ssl/certs/charlietango.com
+      ansible.builtin.file:
+        path: /etc/ssl/certs/charlietango.com
+        state: directory
+        mode: 0755
+
+    - name: Copy *.charlietango.com certificate
+      ansible.builtin.copy:
+        src: /etc/letsencrypt/live/charlietango.com/fullchain.pem
+        dest: /etc/ssl/certs/charlietango.com/fullchain.pem
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Reload nginx
+
+    - name: Create /etc/ssl/private/charlietango.com
+      ansible.builtin.file:
+        path: /etc/ssl/private/charlietango.com
+        state: directory
+        mode: 0700
+
+    - name: Copy *.charlietango.com private key
+      ansible.builtin.copy:
+        src: /etc/letsencrypt/live/charlietango.com/privkey.pem
+        dest: /etc/ssl/private/charlietango.com/privkey.pem
+        owner: root
+        group: root
+        mode: 0600
+      notify:
+        - Reload nginx
+
+  handlers:
+
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

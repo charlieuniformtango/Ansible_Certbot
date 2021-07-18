@@ -1,0 +1,2 @@
+[nginx_servers]
+ipam-new.charlietango.com ansible_user=ubuntu
