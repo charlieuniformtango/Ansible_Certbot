@@ -12,35 +12,39 @@
 
   tasks:
 
-    - name: Create /etc/ssl/certs/charlietango.com
+    - name: "Create /etc/ssl/certs/{{ item }}"
       ansible.builtin.file:
-        path: /etc/ssl/certs/charlietango.com
+        path: "/etc/ssl/certs/{{ item }}"
         state: directory
         mode: 0755
+      with_items: "{{ certificates }}"
 
-    - name: Copy *.charlietango.com certificate
+    - name: "Copy /etc/ssl/certs/{{ item }}/fullchain.pem"
       ansible.builtin.copy:
-        src: /etc/letsencrypt/live/charlietango.com/fullchain.pem
-        dest: /etc/ssl/certs/charlietango.com/fullchain.pem
+        src: "/etc/letsencrypt/live/{{ item }}/fullchain.pem"
+        dest: "/etc/ssl/certs/{{ item }}/fullchain.pem"
         owner: root
         group: root
         mode: 0644
+      with_items: "{{ certificates }}"
       notify:
         - Reload nginx
 
-    - name: Create /etc/ssl/private/charlietango.com
+    - name: "Create /etc/ssl/private/{{ item }}"
       ansible.builtin.file:
-        path: /etc/ssl/private/charlietango.com
+        path: "/etc/ssl/private/{{ item }}"
         state: directory
         mode: 0700
+      with_items: "{{ certificates }}"
 
-    - name: Copy *.charlietango.com private key
+    - name: "Copy /etc/ssl/private/{{ item }}/privkey.pem"
       ansible.builtin.copy:
-        src: /etc/letsencrypt/live/charlietango.com/privkey.pem
-        dest: /etc/ssl/private/charlietango.com/privkey.pem
+        src: "/etc/letsencrypt/live/{{ item }}/privkey.pem"
+        dest: "/etc/ssl/private/{{ item }}/privkey.pem"
         owner: root
         group: root
         mode: 0600
+      with_items: "{{ certificates }}"
       notify:
         - Reload nginx
 

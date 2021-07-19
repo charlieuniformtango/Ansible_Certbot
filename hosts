@@ -1,3 +1,2 @@
 [nginx_servers]
-go.charlietango.com ansible_user=ubuntu
 ipam.charlietango.com ansible_user=ubuntu
