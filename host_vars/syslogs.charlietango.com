@@ -1,0 +1,3 @@
+---
+certificates:
+  - syslogs.charlietango.com

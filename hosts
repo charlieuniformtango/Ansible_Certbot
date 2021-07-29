@@ -1,2 +1,4 @@
 [nginx_servers]
 ipam.charlietango.com ansible_user=ubuntu
+dashboard.charlietango.com ansible_user=ubuntu
+syslogs.charlietango.com ansible_user=ubuntu

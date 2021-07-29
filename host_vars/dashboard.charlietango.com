@@ -1,0 +1,3 @@
+---
+certificates:
+  - dashboard.charlietango.com
