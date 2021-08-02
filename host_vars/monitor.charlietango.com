@@ -1,0 +1,3 @@
+---
+certificates:
+  - monitor.charlietango.com
